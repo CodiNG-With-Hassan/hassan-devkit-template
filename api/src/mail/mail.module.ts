@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { MailerModule } from '@nestjs-modules/mailer';
+// The mailer package ships its adapter on a deep subpath without bundled types.
 import { HandlebarsAdapter } from '@nestjs-modules/mailer/dist/adapters/handlebars.adapter';
 import { join } from 'node:path';
 import { MailService } from './mail.service';
@@ -20,6 +21,7 @@ import { MailService } from './mail.service';
         defaults: { from: config.get<string>('MAIL_FROM') },
         template: {
           dir: join(process.cwd(), 'src/mail/templates'),
+          // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-assignment
           adapter: new HandlebarsAdapter(),
           options: { strict: true },
         },

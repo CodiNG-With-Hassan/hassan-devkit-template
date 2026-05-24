@@ -5,7 +5,9 @@ import { signalStore, withComputed, withMethods, withState, patchState } from '@
  * Sample @ngrx/signals store. Delete this when you start building real features.
  * Kept here only as a working reference for new client projects.
  */
-type CounterState = { count: number };
+interface CounterState {
+  count: number;
+}
 
 const initialState: CounterState = { count: 0 };
 

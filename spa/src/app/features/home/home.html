@@ -12,7 +12,11 @@
         (onClick)="counter.decrement()"
       />
       <p-button icon="pi pi-plus" [rounded]="true" (onClick)="counter.increment()" />
-      <p-button label="{{ 'reset' | translate }}" severity="secondary" (onClick)="counter.reset()" />
+      <p-button
+        label="{{ 'reset' | translate }}"
+        severity="secondary"
+        (onClick)="counter.reset()"
+      />
     </div>
 
     <p class="mt-4 text-sm text-surface-500">
