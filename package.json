@@ -7,6 +7,7 @@
     "docker:dev:down": "hassan-devkit docker:down",
     "docker:dev:logs": "hassan-devkit docker:logs",
     "docker:dev:restart-api": "hassan-devkit docker:restart api",
+    "docker:dev:restart-spa": "hassan-devkit docker:restart spa",
     "db:list-tables": "hassan-devkit db:list-tables",
     "db:psql": "hassan-devkit db:psql",
     "lint": "pnpm lint:api && pnpm lint:spa",
@@ -22,13 +23,13 @@
   },
   "hassan-devkit": {
     "db": {
-      "container": "template-db",
+      "service": "db",
       "user": "postgres",
       "name": "template"
     }
   },
   "devDependencies": {
-    "@coding-with-hassan/devkit": "^0.1.0",
+    "@coding-with-hassan/devkit": "^0.2.0",
     "@coding-with-hassan/lint-staged-config": "^0.1.0",
     "@coding-with-hassan/renovate-config": "^0.1.0",
     "husky": "^9.1.7",
