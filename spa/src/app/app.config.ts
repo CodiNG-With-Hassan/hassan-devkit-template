@@ -8,7 +8,6 @@ import {
 import { isPlatformBrowser } from '@angular/common';
 import { provideRouter, withComponentInputBinding, withRouterConfig } from '@angular/router';
 import { provideHttpClient, withFetch } from '@angular/common/http';
-import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 import { provideTranslateService, TranslateService } from '@ngx-translate/core';
 import { provideModuleTranslateLoader } from '@larscom/ngx-translate-module-loader';
 import { providePrimeNG } from 'primeng/config';
@@ -25,7 +24,6 @@ export const appConfig: ApplicationConfig = {
       withRouterConfig({ paramsInheritanceStrategy: 'always' }),
     ),
     provideHttpClient(withFetch()),
-    provideAnimationsAsync(),
     providePrimeNG({
       theme: {
         preset: appPreset,
