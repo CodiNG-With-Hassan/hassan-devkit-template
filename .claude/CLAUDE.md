@@ -1,6 +1,6 @@
 # Project notes
 
-This repo was scaffolded from [hassan-devkit-template](https://github.com/CodiNG-With-Hassan/hassan-devkit-template). The developer experience (lint, format, docker scripts, husky hooks, lint-staged) lives in `@hassan/*` packages from [hassan-devkit](https://github.com/CodiNG-With-Hassan/hassan-devkit) — those packages, not local files, define the rules.
+This repo was scaffolded from [hassan-devkit-template](https://github.com/CodiNG-With-Hassan/hassan-devkit-template). The developer experience (lint, format, docker scripts, husky hooks, lint-staged) lives in `@coding-with-hassan/*` packages from [hassan-devkit](https://github.com/CodiNG-With-Hassan/hassan-devkit) — those packages, not local files, define the rules.
 
 ## Docker
 
@@ -12,7 +12,7 @@ Always use the npm scripts from the root `package.json` for Docker operations �
 
 ## Linting & Formatting
 
-The lint and format configs live in `@hassan/eslint-config-api`, `@hassan/eslint-config-spa`, `@hassan/prettier-config-api`, `@hassan/prettier-config-spa`. Local `eslint.config.*` / `.prettierrc` files are thin shims — do not inline rules here.
+The lint and format configs live in `@coding-with-hassan/eslint-config-api`, `@coding-with-hassan/eslint-config-spa`, `@coding-with-hassan/prettier-config-api`, `@coding-with-hassan/prettier-config-spa`. Local `eslint.config.*` / `.prettierrc` files are thin shims — do not inline rules here.
 
 | Project | Path | Notable rules |
 |---|---|---|

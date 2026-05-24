@@ -1,4 +1,4 @@
-module.exports = require('@hassan/lint-staged-config')({
+module.exports = require('@coding-with-hassan/lint-staged-config')({
   api: 'api',
   spa: 'spa',
 });

@@ -1,5 +1,5 @@
 # Project-specific pre-commit additions for this client.
-# Invoked by @hassan/devkit's shared pre-commit hook before lint-staged.
+# Invoked by @coding-with-hassan/devkit's shared pre-commit hook before lint-staged.
 # Remove this file if you don't need any extras.
 
 # Example: run the i18n consistency check if translation files changed.

@@ -16,7 +16,7 @@
     "format": "prettier --write \"src/**/*.{ts,html,scss,css,json}\"",
     "format:check": "prettier --check \"src/**/*.{ts,html,scss,css,json}\""
   },
-  "prettier": "@hassan/prettier-config-spa",
+  "prettier": "@coding-with-hassan/prettier-config-spa",
   "dependencies": {
     "@angular/animations": "^21.2.7",
     "@angular/common": "^21.0.0",
@@ -45,8 +45,8 @@
     "@angular/build": "^21.0.4",
     "@angular/cli": "^21.0.4",
     "@angular/compiler-cli": "^21.0.0",
-    "@hassan/eslint-config-spa": "^0.1.0",
-    "@hassan/prettier-config-spa": "^0.1.0",
+    "@coding-with-hassan/eslint-config-spa": "^0.1.0",
+    "@coding-with-hassan/prettier-config-spa": "^0.1.0",
     "@tailwindcss/postcss": "^4.1.12",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",

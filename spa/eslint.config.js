@@ -1,2 +1,2 @@
 // @ts-check
-module.exports = require('@hassan/eslint-config-spa')({ prefix: 'app' });
+module.exports = require('@coding-with-hassan/eslint-config-spa')({ prefix: 'app' });
