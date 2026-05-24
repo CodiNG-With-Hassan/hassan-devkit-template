@@ -1,0 +1,37 @@
+{
+  "name": "hassan-devkit-template",
+  "private": true,
+  "packageManager": "pnpm@10.33.0",
+  "scripts": {
+    "docker:dev:up": "hassan-devkit docker:up",
+    "docker:dev:down": "hassan-devkit docker:down",
+    "docker:dev:logs": "hassan-devkit docker:logs",
+    "docker:dev:restart-api": "hassan-devkit docker:restart api",
+    "db:list-tables": "hassan-devkit db:list-tables",
+    "db:psql": "hassan-devkit db:psql",
+    "lint": "pnpm lint:api && pnpm lint:spa",
+    "lint:api": "pnpm -C api lint",
+    "lint:spa": "pnpm -C spa lint",
+    "format": "pnpm format:api && pnpm format:spa",
+    "format:api": "pnpm -C api format",
+    "format:spa": "pnpm -C spa format",
+    "format:check": "pnpm format:check:api && pnpm format:check:spa",
+    "format:check:api": "pnpm -C api exec prettier --check --no-error-on-unmatched-pattern \"src/**/*.ts\" \"test/**/*.ts\"",
+    "format:check:spa": "pnpm -C spa format:check",
+    "prepare": "hassan-devkit hooks:install"
+  },
+  "hassan-devkit": {
+    "db": {
+      "container": "template-db",
+      "user": "postgres",
+      "name": "template"
+    }
+  },
+  "devDependencies": {
+    "@hassan/devkit": "^0.1.0",
+    "@hassan/lint-staged-config": "^0.1.0",
+    "@hassan/renovate-config": "^0.1.0",
+    "husky": "^9.1.7",
+    "lint-staged": "^17.0.4"
+  }
+}

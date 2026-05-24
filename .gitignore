@@ -1,0 +1,43 @@
+# Dependencies
+**/node_modules/
+
+# Build output
+**/dist/
+**/tmp/
+**/out-tsc/
+**/build/
+
+# Logs
+*.log
+npm-debug.log*
+pnpm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# OS
+.DS_Store
+Thumbs.db
+
+# IDEs and editors
+.idea/
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# Environment variables
+.env
+.env.development.local
+.env.test.local
+.env.production.local
+.env.local
+
+# Test coverage
+**/coverage/
+
+# Angular
+**/.angular/cache
+
+# Lint caches
+**/.eslintcache
