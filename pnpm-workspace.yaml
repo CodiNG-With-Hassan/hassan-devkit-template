@@ -1,3 +1,15 @@
 packages:
-  - api
-  - spa
+  - apps/*
+  - libs/*
+
+# Dependencies allowed to run install scripts (native builds).
+onlyBuiltDependencies:
+  - bcrypt
+  - '@nestjs/core'
+  - unrs-resolver
+  - sharp
+  - '@parcel/watcher'
+  - esbuild
+  - lmdb
+  - msgpackr-extract
+  - nx

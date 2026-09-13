@@ -41,3 +41,11 @@ Thumbs.db
 
 # Lint caches
 **/.eslintcache
+
+# Nx
+.nx/cache
+.nx/workspace-data
+.nx-ci-cache
+
+# Acceptance-test workbooks are regenerated on demand (pnpm test-cases:generate)
+docs/testing/test-cases-*.xlsx
