@@ -1,5 +1,5 @@
 {
-  "name": "hassan-devkit-template",
+  "name": "template",
   "private": true,
   "packageManager": "pnpm@10.33.0",
   "scripts": {
@@ -7,32 +7,92 @@
     "docker:dev:down": "hassan-devkit docker:down",
     "docker:dev:logs": "hassan-devkit docker:logs",
     "docker:dev:restart-api": "hassan-devkit docker:restart api",
-    "docker:dev:restart-spa": "hassan-devkit docker:restart spa",
+    "docker:dev:restart-web": "hassan-devkit docker:restart web",
+    "worktree:create": "hassan-devkit worktree:create",
+    "worktree:env": "hassan-devkit worktree:env",
+    "worktree:profiles": "hassan-devkit worktree:profiles",
+    "worktree:remove": "hassan-devkit worktree:remove",
+    "worktree:prune": "hassan-devkit worktree:prune",
+    "worktree:list": "hassan-devkit worktree:list",
     "db:list-tables": "hassan-devkit db:list-tables",
     "db:psql": "hassan-devkit db:psql",
-    "lint": "pnpm lint:api && pnpm lint:spa",
-    "lint:api": "pnpm -C api lint",
-    "lint:spa": "pnpm -C spa lint",
-    "format": "pnpm format:api && pnpm format:spa",
-    "format:api": "pnpm -C api format",
-    "format:spa": "pnpm -C spa format",
-    "format:check": "pnpm format:check:api && pnpm format:check:spa",
-    "format:check:api": "pnpm -C api exec prettier --check --no-error-on-unmatched-pattern \"src/**/*.ts\" \"test/**/*.ts\"",
-    "format:check:spa": "pnpm -C spa format:check",
-    "prepare": "hassan-devkit hooks:install"
+    "build": "nx run-many -t build",
+    "lint": "nx run-many -t lint",
+    "format": "nx run-many -t format",
+    "format:check": "nx run-many -t format:check",
+    "affected": "hassan-devkit ci:affected",
+    "ci:check": "hassan-devkit ci:check",
+    "test-cases:generate": "hassan-devkit test-cases:generate",
+    "prepare": "hassan-devkit hooks:install && hassan-devkit claude:install"
   },
   "hassan-devkit": {
+    "worktree": {
+      "ports": {
+        "api": 3000,
+        "web": 4200,
+        "db": 5432,
+        "minio": 9000,
+        "minioConsole": 9001,
+        "n8n": 5678,
+        "smtp": 1025,
+        "mailpit": 8025,
+        "pgadmin": 5050
+      },
+      "profiles": {
+        "default": [
+          "api"
+        ],
+        "required": [
+          "api"
+        ]
+      },
+      "seeds": {
+        "scripts": []
+      },
+      "ready": {
+        "url": "http://localhost:${DEVKIT_PORT_API}/api/docs-json",
+        "timeoutSeconds": 600
+      },
+      "env": {
+        "FRONTEND_URL": "http://localhost:${DEVKIT_PORT_WEB}",
+        "API_PROXY_TARGET": "http://localhost:${DEVKIT_PORT_API}"
+      }
+    },
+    "tracker": {
+      "kind": "github",
+      "prefix": "GH"
+    },
+    "commits": {},
+    "ci": {
+      "nodeVersion": "24",
+      "checks": []
+    },
+    "testCases": {
+      "dir": "docs/testing",
+      "languages": [
+        "en",
+        "nl"
+      ],
+      "title": "Template"
+    },
     "db": {
       "service": "db",
       "user": "postgres",
       "name": "template"
+    },
+    "i18n": {
+      "dir": "apps/web/public/assets/i18n",
+      "languages": [
+        "en",
+        "nl"
+      ]
     }
   },
   "devDependencies": {
-    "@coding-with-hassan/devkit": "^0.2.0",
-    "@coding-with-hassan/lint-staged-config": "^0.1.0",
-    "@coding-with-hassan/renovate-config": "^0.1.0",
+    "@coding-with-hassan/devkit": "1.0.0-next.3",
+    "@coding-with-hassan/renovate-config": "^0.1.1",
     "husky": "^9.1.7",
-    "lint-staged": "^17.0.4"
+    "lint-staged": "^17.0.4",
+    "nx": "^23.1.1"
   }
 }

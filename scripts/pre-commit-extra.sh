@@ -1,10 +1,6 @@
-# Project-specific pre-commit additions for this client.
-# Invoked by @coding-with-hassan/devkit's shared pre-commit hook before lint-staged.
-# Remove this file if you don't need any extras.
-
-# Example: run the i18n consistency check if translation files changed.
-if git diff --cached --name-only | grep -q '^spa/public/assets/i18n/'; then
-  echo "🌐 i18n changes detected — running translation check..."
-  cd spa && node scripts/check-translations.mjs || exit 1
-  cd ..
-fi
+#!/bin/sh
+# Project-specific pre-commit guards. Invoked first by the shared hook that
+# @coding-with-hassan/devkit installs (`hassan-devkit hooks:install`); exit non-zero to
+# block the commit. Keep project-wide standards in the package — only guards that need
+# knowledge of THIS repo belong here.
+exit 0

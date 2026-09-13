@@ -1,0 +1,26 @@
+<section class="mx-auto max-w-3xl p-8">
+  <p-card>
+    <ng-template #title>{{ 'HOME.TITLE' | translate }}</ng-template>
+    <ng-template #subtitle>{{ 'HOME.SUBTITLE' | translate }}</ng-template>
+
+    <div class="flex items-center gap-4">
+      <p class="text-2xl">{{ counter.count() }}</p>
+      <p-button
+        icon="pi pi-minus"
+        severity="secondary"
+        [rounded]="true"
+        (onClick)="counter.decrement()"
+      />
+      <p-button icon="pi pi-plus" [rounded]="true" (onClick)="counter.increment()" />
+      <p-button
+        label="{{ 'HOME.RESET' | translate }}"
+        severity="secondary"
+        (onClick)="counter.reset()"
+      />
+    </div>
+
+    <p class="mt-4 text-sm text-surface-500">
+      {{ 'HOME.DOUBLED' | translate }}: {{ counter.doubled() }}
+    </p>
+  </p-card>
+</section>
