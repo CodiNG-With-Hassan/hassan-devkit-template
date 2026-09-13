@@ -9,8 +9,8 @@ importers:
   .:
     devDependencies:
       '@coding-with-hassan/devkit':
-        specifier: 1.0.0-next.3
-        version: 1.0.0-next.3
+        specifier: ^1.0.0
+        version: 1.0.0
       '@coding-with-hassan/renovate-config':
         specifier: ^0.1.1
         version: 0.1.1
@@ -872,8 +872,8 @@ packages:
     resolution: {integrity: sha512-y7/yvZ2TPAnR9+jnc00klvNNLkJiXFFrQA/hlLCcxA9a2A4zQIOimyFQ9XfwYKiGD1fb5GY8vbKIIgO8d5Tb2A==}
     engines: {node: '>= 20.12.0'}
 
-  '@coding-with-hassan/devkit@1.0.0-next.3':
-    resolution: {integrity: sha512-2nQ5cLc+swKMZvsLKkdkGZ7nEP3u9ye7Lb25Mg1ASE/S4NqoAjcFTYG3Evf1MkTKIqQ9fX5TuVMm5qLP8yB8OA==}
+  '@coding-with-hassan/devkit@1.0.0':
+    resolution: {integrity: sha512-Clv839AbkKd841RDiWAgn8Pupgu5eqxseByyqqlCKWZAml4ECGv4XmWCHpf20vuvAEcl9MOPr5GucXeoGdqGTQ==}
     engines: {node: '>=22.13'}
     hasBin: true
 
@@ -8392,7 +8392,7 @@ snapshots:
       fast-wrap-ansi: 0.2.0
       sisteransi: 1.0.5
 
-  '@coding-with-hassan/devkit@1.0.0-next.3':
+  '@coding-with-hassan/devkit@1.0.0':
     dependencies:
       cac: 6.7.14
       exceljs: 4.4.0
