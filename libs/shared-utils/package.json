@@ -1,0 +1,21 @@
+{
+  "name": "shared-utils",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Framework-agnostic shared utilities for the web apps.",
+  "sideEffects": false,
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
+  },
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  }
+}

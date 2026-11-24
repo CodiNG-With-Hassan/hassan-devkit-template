@@ -1,0 +1,14 @@
+<button
+  type="button"
+  role="switch"
+  class="inline-flex size-10 cursor-pointer items-center justify-center rounded-full border-0 bg-transparent text-(--p-text-muted-color) transition-colors hover:bg-(--p-content-hover-background)"
+  [attr.aria-checked]="themeService.isDarkMode()"
+  [attr.aria-label]="'SHARED.COMPONENTS.THEME.DARK' | translate"
+  [attr.title]="
+    (themeService.isDarkMode() ? 'SHARED.COMPONENTS.THEME.DARK' : 'SHARED.COMPONENTS.THEME.LIGHT')
+      | translate
+  "
+  (click)="themeService.toggle()"
+>
+  <i [class]="themeService.isDarkMode() ? 'pi pi-moon' : 'pi pi-sun'" aria-hidden="true"></i>
+</button>
