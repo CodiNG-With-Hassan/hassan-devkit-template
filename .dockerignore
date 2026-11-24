@@ -1,0 +1,35 @@
+# Build context is the repo root for all app images (dev and prod).
+# Keep the context small and free of secrets.
+
+# Dependencies & build output (reinstalled/rebuilt inside the image)
+**/node_modules
+**/dist
+**/www
+**/.angular
+**/.pnpm-store
+.nx
+
+# Not needed inside any image
+docs
+.claude
+
+# Tests & coverage
+**/coverage
+**/.nyc_output
+
+# Secrets / local env (never ship into the image)
+**/.env
+**/.env.*
+
+# VCS & tooling
+.git
+.github
+**/.vscode
+**/*.log
+
+# Local-dev-only docker assets
+docker/docker-compose.dev.yml
+docker/pgadmin
+docker/Dockerfile.dev
+docker/Dockerfile.admin.dev
+docker/Dockerfile.customer.dev

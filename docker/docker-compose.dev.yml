@@ -1,25 +1,31 @@
-# Paths in this file are relative to docker/ (compose semantics): build contexts are `..`.
-# One stack per checkout: COMPOSE_PROJECT_NAME and the DEVKIT_PORT_* host ports come from
-# the managed block in .env that `hassan-devkit worktree:env` writes (slot 0 = the main
-# checkout, unoffset ports). See docs/WORKTREES.md.
+# COMPOSE_PROJECT_NAME (set per worktree in .env) takes precedence over this
+# default; each worktree gets its own container/volume namespace. Host ports
+# are DEVKIT_PORT_* driven for the same reason — see docs/WORKTREES.md.
 #
 # Profiles (COMPOSE_PROFILES in .env, managed by `pnpm worktree:profiles add|remove`):
-#   api    — db, init, api, minio, mailpit (mandatory; the default)
-#   web    — the Angular dev server (SSR)
-#   extras — n8n + pgadmin (off by default)
+#   api      — db, backend (mandatory; the default)
+#   customer — the web-customer dev server (server-side rendering, the heaviest one)
+#   admin    — the web-admin dev server
+#   extras   — pgadmin (off by default everywhere, main checkout included)
 #
-# Dev images are shared across worktrees: template-dev-<svc>:${DEVKIT_IMAGE_TAG}, where the
-# tag hashes the lockfile + every package.json + these Dockerfiles. Source is bind-mounted,
-# so checkouts on the same dependencies reuse one image and only a dependency bump builds.
+# Dev images are shared across worktrees: template-dev-<svc>:${DEVKIT_IMAGE_TAG},
+# where the tag hashes the lockfile + every package.json + the dev Dockerfiles
+# (`hassan-devkit worktree:env` computes it and `pnpm docker:dev:up` refreshes it
+# on every up). Source is bind-mounted, so worktrees on the
+# same lockfile reuse one image and only a dependency bump triggers a build.
 #
-# Dev servers restart on-failure:3 (a crash-looping watcher must not burn CPU forever);
-# infra is unless-stopped.
+# Restart policy: dev servers use on-failure:3 — a crash-looping Angular/Nest
+# watcher burns CPU forever under `always`, and `always`/`unless-stopped`
+# would also bring every dev server back on Docker Desktop launch. Infra
+# (cheap, stateful) is unless-stopped: it comes back with the daemon, a dev
+# server only when someone runs up.
 name: ${COMPOSE_PROJECT_NAME:-template}
 
-# Fails every compose command with an actionable error while COMPOSE_PROFILES is unset or
-# empty. An extension field, not a service label: changing the profile set never alters a
-# container's config.
-x-devkit-profiles-guard: ${COMPOSE_PROFILES:?COMPOSE_PROFILES missing or empty in .env - run pnpm worktree:env (writes the default COMPOSE_PROFILES=api)}
+# The ${COMPOSE_PROFILES:?...} guard fails every compose command with an
+# actionable error while the variable is unset OR empty. It lives in an
+# extension field, not a service label, so changing the profile set never
+# alters a container's config — `profiles add admin` must not recreate the API.
+x-devkit-profiles-guard: ${COMPOSE_PROFILES:?COMPOSE_PROFILES missing or empty in .env - run pnpm worktree:env (writes the default COMPOSE_PROFILES=api), see docs/WORKTREES.md}
 
 services:
   db:
@@ -35,37 +41,13 @@ services:
     ports:
       - '${DEVKIT_PORT_DB:-5432}:5432'
 
-  init:
-    build:
-      context: ..
-      dockerfile: docker/Dockerfile.init
-    image: template-dev-init:${DEVKIT_IMAGE_TAG:-latest}
-    profiles: ['api']
-    depends_on:
-      - db
-      - minio
-    restart: on-failure
-    environment:
-      PGHOST: db
-      PGUSER: ${DB_USERNAME}
-      PGPASSWORD: ${DB_PASSWORD}
-      MINIO_HOST: minio
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-      INIT_BUCKETS: ${INIT_BUCKETS:-uploads avatars}
-    volumes:
-      - ./scripts/dev-init.sh:/init.sh:ro
-    entrypoint: ['/bin/sh', '/init.sh']
-
-  api:
+  backend:
+    image: template-dev-backend:${DEVKIT_IMAGE_TAG:-latest}
     build:
       context: ..
       dockerfile: docker/Dockerfile.dev
-    image: template-dev-api:${DEVKIT_IMAGE_TAG:-latest}
     profiles: ['api']
     restart: on-failure:3
-    working_dir: /workspace/apps/api
-    command: ['pnpm', 'run', 'start:dev']
     environment:
       - PORT=3000
       - NODE_ENV=development
@@ -74,97 +56,62 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
       - DB_NAME=${DB_NAME}
-      - JWT_SECRET=${JWT_SECRET}
-      - JWT_EXPIRATION=${JWT_EXPIRATION}
       - CORS_ORIGIN=${CORS_ORIGIN}
-      - MAIL_HOST=mailpit
-      - MAIL_PORT=1025
-      - MAIL_FROM=${MAIL_FROM:-noreply@example.com}
-      - FRONTEND_URL=${FRONTEND_URL:-http://localhost:4200}
-      - MINIO_ENDPOINT=${MINIO_ENDPOINT}
-      - MINIO_PORT=${MINIO_PORT}
-      - MINIO_USE_SSL=${MINIO_USE_SSL}
-      - MINIO_ACCESS_KEY=${MINIO_ROOT_USER}
-      - MINIO_SECRET_KEY=${MINIO_ROOT_PASSWORD}
+      # Spec provenance: fetch-spec.mjs (pnpm api:types) refuses a spec whose
+      # stack/branch stamp doesn't match the checkout it runs in.
+      - DEVKIT_STACK=${COMPOSE_PROJECT_NAME:-template}
+      - DEVKIT_BRANCH=${DEVKIT_BRANCH:-}
     ports:
       - '${DEVKIT_PORT_API:-3000}:3000'
     depends_on:
       - db
     volumes:
-      # Source is bind-mounted; node_modules stay in a named volume seeded from the image.
       - ../apps/api:/workspace/apps/api
       - api_node_modules:/workspace/apps/api/node_modules
 
-  web:
+  customer:
+    image: template-dev-customer:${DEVKIT_IMAGE_TAG:-latest}
     build:
       context: ..
-      dockerfile: docker/Dockerfile.web.dev
-    image: template-dev-web:${DEVKIT_IMAGE_TAG:-latest}
-    profiles: ['web']
+      dockerfile: docker/Dockerfile.customer.dev
+    profiles: ['customer']
     restart: on-failure:3
-    working_dir: /workspace/apps/web
-    command: ['pnpm', 'exec', 'ng', 'serve', '--host', '0.0.0.0', '--port', '4200']
     environment:
-      - CHOKIDAR_USEPOLLING=true
-      - CHOKIDAR_INTERVAL=1000
-      - ANGULAR_SSR_ALLOWED_HOSTS=.localhost
-      # The dev server proxies /api to the API over the compose network (proxy.conf.mjs).
-      - API_PROXY_TARGET=http://api:3000
+      # The dev server renders on the server too: accept this stack's localhost names.
+      - NG_ALLOWED_HOSTS=.localhost
+      # Origin the server-side render fetches /assets (translations) and /api from:
+      # the dev server itself, inside the container (server-absolute-url-interceptor.ts).
+      - SSR_SELF_ORIGIN=http://localhost:4200
+      # In-container the dev-server /api proxy must target the backend service,
+      # not the host (see the app's proxy.conf.mjs).
+      - API_PROXY_TARGET=http://backend:3000
     ports:
-      - '${DEVKIT_PORT_WEB:-4200}:4200'
+      - '${DEVKIT_PORT_CUSTOMER:-4200}:4200'
     volumes:
-      - ../apps/web:/workspace/apps/web
-      - web_node_modules:/workspace/apps/web/node_modules
+      - ../apps/web-customer:/workspace/apps/web-customer
+      - ../libs:/workspace/libs
+      - customer_node_modules:/workspace/apps/web-customer/node_modules
 
-  minio:
-    image: minio/minio:latest
-    profiles: ['api']
-    restart: unless-stopped
-    ports:
-      - '${DEVKIT_PORT_MINIO:-9000}:9000'
-      - '${DEVKIT_PORT_MINIO_CONSOLE:-9001}:9001'
-    command: ['server', '--console-address', ':9001', '/data']
+  admin:
+    image: template-dev-admin:${DEVKIT_IMAGE_TAG:-latest}
+    build:
+      context: ..
+      dockerfile: docker/Dockerfile.admin.dev
+    profiles: ['admin']
+    restart: on-failure:3
     environment:
-      MINIO_ROOT_USER: ${MINIO_ROOT_USER}
-      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD}
-    volumes:
-      - minio_data:/data
-
-  mailpit:
-    image: axllent/mailpit:latest
-    profiles: ['api']
-    restart: unless-stopped
+      # In-container the dev-server /api proxy must target the backend service,
+      # not the host (see the app's proxy.conf.mjs).
+      - API_PROXY_TARGET=http://backend:3000
     ports:
-      - '${DEVKIT_PORT_SMTP:-1025}:1025'
-      - '${DEVKIT_PORT_MAILPIT:-8025}:8025'
-
-  n8n:
-    image: docker.n8n.io/n8nio/n8n:latest
-    profiles: ['extras']
-    restart: unless-stopped
-    ports:
-      - '${DEVKIT_PORT_N8N:-5678}:5678'
-    depends_on:
-      - init
-    environment:
-      - N8N_HOST=localhost
-      - N8N_PORT=5678
-      - N8N_PROTOCOL=http
-      - N8N_ENFORCE_SETTINGS_FILE_PERMISSIONS=true
-      - N8N_RUNNERS_ENABLED=true
-      - WEBHOOK_URL=http://localhost:${DEVKIT_PORT_N8N:-5678}/
-      - GENERIC_TIMEZONE=Europe/Amsterdam
-      - N8N_ENCRYPTION_KEY=${N8N_ENCRYPTION_KEY}
-      - TZ=Europe/Amsterdam
-      - DB_TYPE=postgresdb
-      - DB_POSTGRESDB_HOST=db
-      - DB_POSTGRESDB_PORT=5432
-      - DB_POSTGRESDB_DATABASE=n8n
-      - DB_POSTGRESDB_USER=${DB_USERNAME}
-      - DB_POSTGRESDB_PASSWORD=${DB_PASSWORD}
+      - '${DEVKIT_PORT_ADMIN:-4201}:4201'
     volumes:
-      - n8n_data:/home/node/.n8n
+      - ../apps/web-admin:/workspace/apps/web-admin
+      - ../libs:/workspace/libs
+      - admin_node_modules:/workspace/apps/web-admin/node_modules
 
+  # "extras" is off by default everywhere (main checkout included); opt in
+  # with `pnpm worktree:profiles add extras`.
   pgadmin:
     image: dpage/pgadmin4:latest
     profiles: ['extras']
@@ -186,11 +133,13 @@ services:
 
 volumes:
   pgdata:
-  minio_data:
-  n8n_data:
-  # node_modules keyed by project + image tag: a dependency bump changes the tag, the next
-  # `up` mounts fresh volumes seeded from the new image; worktree:env drops stale-tag volumes.
+  # node_modules live in named volumes keyed by project + image tag. A dependency
+  # bump changes DEVKIT_IMAGE_TAG, so the next up mounts fresh volumes seeded from
+  # the new image; `hassan-devkit worktree:env` removes the project's stale-tag
+  # volumes.
   api_node_modules:
     name: ${COMPOSE_PROJECT_NAME:-template}_api_node_modules_${DEVKIT_IMAGE_TAG:-latest}
-  web_node_modules:
-    name: ${COMPOSE_PROJECT_NAME:-template}_web_node_modules_${DEVKIT_IMAGE_TAG:-latest}
+  customer_node_modules:
+    name: ${COMPOSE_PROJECT_NAME:-template}_customer_node_modules_${DEVKIT_IMAGE_TAG:-latest}
+  admin_node_modules:
+    name: ${COMPOSE_PROJECT_NAME:-template}_admin_node_modules_${DEVKIT_IMAGE_TAG:-latest}
