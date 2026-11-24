@@ -1,0 +1,25 @@
+{
+  "eslint.useFlatConfig": true,
+  "eslint.workingDirectories": [
+    {
+      "directory": "apps/api",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "apps/web-admin",
+      "changeProcessCWD": true
+    },
+    {
+      "directory": "apps/web-customer",
+      "changeProcessCWD": true
+    }
+  ],
+  "prettier.requireConfig": true,
+  "files.watcherExclude": {
+    "**/.angular/**": true,
+    "**/.nx/**": true,
+    "**/coverage/**": true,
+    "**/dist/**": true,
+    "**/node_modules/**": true
+  }
+}

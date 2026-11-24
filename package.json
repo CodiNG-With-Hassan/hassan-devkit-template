@@ -1,13 +1,17 @@
 {
-  "name": "template",
+  "name": "template-monorepo",
   "private": true,
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.25.0",
+  "engines": {
+    "node": ">=26"
+  },
   "scripts": {
     "docker:dev:up": "hassan-devkit docker:up",
     "docker:dev:down": "hassan-devkit docker:down",
     "docker:dev:logs": "hassan-devkit docker:logs",
-    "docker:dev:restart-api": "hassan-devkit docker:restart api",
-    "docker:dev:restart-web": "hassan-devkit docker:restart web",
+    "docker:dev:restart-api": "hassan-devkit docker:restart backend",
+    "docker:dev:restart-admin": "hassan-devkit docker:restart admin",
+    "docker:dev:restart-customer": "hassan-devkit docker:restart customer",
     "worktree:create": "hassan-devkit worktree:create",
     "worktree:env": "hassan-devkit worktree:env",
     "worktree:profiles": "hassan-devkit worktree:profiles",
@@ -18,24 +22,31 @@
     "db:psql": "hassan-devkit db:psql",
     "build": "nx run-many -t build",
     "lint": "nx run-many -t lint",
+    "lint:api": "nx run api:lint",
+    "lint:spa": "nx run-many -t lint -p \"web-*\"",
     "format": "nx run-many -t format",
+    "format:api": "nx run api:format",
+    "format:spa": "nx run-many -t format -p \"web-*\"",
     "format:check": "nx run-many -t format:check",
+    "format:check:api": "nx run-many -t format:check -p api",
+    "format:check:spa": "nx run-many -t format:check -p \"web-*\"",
     "affected": "hassan-devkit ci:affected",
     "ci:check": "hassan-devkit ci:check",
+    "api:types": "nx run api-types:sync && nx run api-client:generate",
+    "api:types:check": "nx run api-types:check && nx run api-client:check",
     "test-cases:generate": "hassan-devkit test-cases:generate",
     "prepare": "hassan-devkit hooks:install && hassan-devkit claude:install"
   },
   "hassan-devkit": {
     "worktree": {
+      "baseDir": "../template-worktrees",
+      "maxSlot": 30,
+      "projectName": "template",
       "ports": {
         "api": 3000,
-        "web": 4200,
         "db": 5432,
-        "minio": 9000,
-        "minioConsole": 9001,
-        "n8n": 5678,
-        "smtp": 1025,
-        "mailpit": 8025,
+        "customer": 4200,
+        "admin": 4201,
         "pgadmin": 5050
       },
       "profiles": {
@@ -50,22 +61,55 @@
         "scripts": []
       },
       "ready": {
-        "url": "http://localhost:${DEVKIT_PORT_API}/api/docs-json",
+        "url": "http://localhost:${DEVKIT_PORT_API}/api-json",
         "timeoutSeconds": 600
       },
       "env": {
-        "FRONTEND_URL": "http://localhost:${DEVKIT_PORT_WEB}",
-        "API_PROXY_TARGET": "http://localhost:${DEVKIT_PORT_API}"
+        "CUSTOMER_URL": "http://localhost:${DEVKIT_PORT_CUSTOMER}",
+        "ADMIN_URL": "http://localhost:${DEVKIT_PORT_ADMIN}",
+        "API_PROXY_TARGET": "http://localhost:${DEVKIT_PORT_API}",
+        "API_SPEC_URL": "http://localhost:${DEVKIT_PORT_API}/api-json"
       }
     },
     "tracker": {
       "kind": "github",
-      "prefix": "GH"
+      "prefix": "TPL"
     },
     "commits": {},
     "ci": {
-      "nodeVersion": "24",
-      "checks": []
+      "nodeVersion": "26",
+      "baseBranch": "main",
+      "checks": [
+        {
+          "name": "translations",
+          "paths": [
+            "^apps/[^/]+/(public|src)/assets/i18n/",
+            "^libs/i18n/",
+            "^libs/api-types/spec/openapi\\.json$",
+            "^apps/api/src/common/(errors/|supported-languages\\.ts$)",
+            "^scripts/(check-[a-z-]*translations\\.mjs|lib/i18n-check-utils\\.mjs)$"
+          ],
+          "run": "pnpm exec nx run-many -t check-translations"
+        },
+        {
+          "name": "api-contract",
+          "paths": [
+            "^(apps/api|libs/api-types|libs/api-client)/"
+          ],
+          "run": "pnpm api:types:check"
+        }
+      ],
+      "affected": {
+        "contentOnly": [
+          "libs/i18n/src/**/*.json",
+          "apps/*/public/assets/i18n/**",
+          "apps/*/src/assets/i18n/**"
+        ],
+        "adopted": {
+          "scripts/**/*.mjs": "tpl-i18n",
+          "docs/testing/*.ts": "tpl-i18n"
+        }
+      }
     },
     "testCases": {
       "dir": "docs/testing",
@@ -79,20 +123,14 @@
       "service": "db",
       "user": "postgres",
       "name": "template"
-    },
-    "i18n": {
-      "dir": "apps/web/public/assets/i18n",
-      "languages": [
-        "en",
-        "nl"
-      ]
     }
   },
   "devDependencies": {
-    "@coding-with-hassan/devkit": "^1.0.0",
-    "@coding-with-hassan/renovate-config": "^0.1.1",
+    "@coding-with-hassan/devkit": "^1.4.0",
+    "@coding-with-hassan/renovate-config": "^0.2.0",
     "husky": "^9.1.7",
     "lint-staged": "^17.0.4",
+    "mattpocock-skills": "github:mattpocock/skills#v1.2.3",
     "nx": "^23.1.1"
   }
 }

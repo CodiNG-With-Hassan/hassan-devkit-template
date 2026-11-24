@@ -1,0 +1,46 @@
+{
+  "folders": [
+    {
+      "name": "monorepo",
+      "path": "."
+    },
+    {
+      "name": "api (nest)",
+      "path": "apps/api"
+    },
+    {
+      "name": "web-admin (angular)",
+      "path": "apps/web-admin"
+    },
+    {
+      "name": "web-customer (angular, ssr)",
+      "path": "apps/web-customer"
+    }
+  ],
+  "settings": {
+    "eslint.useFlatConfig": true,
+    "eslint.workingDirectories": [
+      {
+        "directory": "apps/api",
+        "changeProcessCWD": true
+      },
+      {
+        "directory": "apps/web-admin",
+        "changeProcessCWD": true
+      },
+      {
+        "directory": "apps/web-customer",
+        "changeProcessCWD": true
+      }
+    ],
+    "prettier.requireConfig": true,
+    "typescript.tsdk": "apps/web-admin/node_modules/typescript/lib"
+  },
+  "extensions": {
+    "recommendations": [
+      "esbenp.prettier-vscode",
+      "dbaeumer.vscode-eslint",
+      "angular.ng-template"
+    ]
+  }
+}

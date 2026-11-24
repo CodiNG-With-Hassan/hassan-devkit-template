@@ -8,8 +8,8 @@ this machine.
 
 ## Conventions
 
-- **Branches and commits** carry the issue as `GH-<n>`: branch `GH-<n>-Short-Title`,
-  commit subject `GH-<n> type(scope): …` (see `hassan-devkit commits:show`). A leading
+- **Branches and commits** carry the issue as `TPL-<n>`: branch `TPL-<n>-Short-Title`,
+  commit subject `TPL-<n> type(scope): …` (see `hassan-devkit commits:show`). A leading
   `#<n>` is never used in a subject — git treats `#` lines as comments in the editor.
 - **PR body** ends with `Closes #<n>` so the issue closes on merge.
 - **Create an issue**: `gh issue create --repo <owner/repo> --title … --body …`.
@@ -17,7 +17,7 @@ this machine.
 - **List issues**: `gh issue list --state open` (add `--label` / `--assignee @me` as needed).
 - **Comment**: `gh issue comment <n> --body …`.
 - **Assign — always to the current user when you start an issue**: whoever starts the work
-  owns it. `hassan-devkit worktree:create GH-<n>-…` runs `gh issue edit <n> --add-assignee @me`
+  owns it. `hassan-devkit worktree:create TPL-<n>-…` runs `gh issue edit <n> --add-assignee @me`
   for the branch's issue; for any other way of picking up an issue, run that yourself first.
   There is no status field: an open PR is the progress signal.
 - **Labels**: `gh issue edit <n> --add-label … / --remove-label …`.

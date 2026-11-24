@@ -5,30 +5,40 @@
     "sharedGlobals": [
       "{workspaceRoot}/pnpm-lock.yaml",
       "{workspaceRoot}/pnpm-workspace.yaml",
-      { "runtime": "node --version" }
+      {
+        "runtime": "node --version"
+      }
     ],
     "default": [
       "{projectRoot}/**/*",
       "!{projectRoot}/.angular/**",
-      "!{projectRoot}/coverage/**",
       "!{projectRoot}/dist/**",
+      "!{projectRoot}/www/**",
       "sharedGlobals"
     ],
     "production": [
       "default",
-      "!{projectRoot}/**/*.spec.ts",
-      "!{projectRoot}/test/**/*",
       "!{projectRoot}/eslint.config.*"
     ]
   },
   "targetDefaults": {
     "build": {
       "cache": true,
-      "inputs": ["production", "^production"],
-      "outputs": ["{projectRoot}/dist"]
+      "inputs": [
+        "production",
+        "^production"
+      ],
+      "outputs": [
+        "{projectRoot}/dist",
+        "{projectRoot}/www"
+      ]
     },
-    "lint": { "cache": true },
-    "test": { "cache": true, "outputs": ["{projectRoot}/coverage"] },
-    "format:check": { "cache": true }
-  }
+    "lint": {
+      "cache": true
+    },
+    "format:check": {
+      "cache": true
+    }
+  },
+  "analytics": false
 }
