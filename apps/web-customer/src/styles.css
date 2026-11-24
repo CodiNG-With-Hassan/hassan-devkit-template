@@ -1,0 +1,29 @@
+@layer tailwind-base, primeng, tailwind-utilities;
+@import 'tailwindcss/theme' layer(tailwind-base);
+@import 'tailwindcss/preflight' layer(tailwind-base);
+@import 'tailwindcss/utilities' layer(tailwind-utilities);
+
+/* Placeholder typeface, self-hosted (libs/theme/README.md). */
+@import '@fontsource-variable/inter/index.css';
+@import 'primeicons/primeicons.css';
+
+/* The shared UI lib is compiled as source, so its templates carry utilities too. */
+@source '../../../libs/web-ui/src';
+
+@custom-variant dark (&:where(.dark-mode, .dark-mode *));
+
+@theme {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+}
+
+@layer tailwind-base {
+  :root {
+    font-family: var(--font-sans);
+  }
+
+  body {
+    color: var(--p-text-color);
+    /* Stock Aura keeps one surface ramp for both schemes: pick the page tone per scheme. */
+    background-color: light-dark(var(--p-surface-50), var(--p-surface-950));
+  }
+}

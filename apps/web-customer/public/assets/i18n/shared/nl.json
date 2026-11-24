@@ -1,0 +1,22 @@
+{
+  "SHARED": {
+    "NAV": {
+      "HOME": "Ga naar de startpagina"
+    },
+    "COMPONENTS": {
+      "THEME": {
+        "LIGHT": "Lichte modus",
+        "DARK": "Donkere modus"
+      },
+      "FIELD_ERRORS": {
+        "IS_REQUIRED": "{{ label }} is verplicht",
+        "EMAIL": "{{ label }} is geen geldig e-mailadres",
+        "MIN_LENGTH": "{{ label }} moet minimaal {{ value }} tekens bevatten",
+        "MAX_LENGTH": "{{ label }} mag maximaal {{ value }} tekens bevatten",
+        "MIN": "{{ label }} moet minimaal {{ value }} zijn",
+        "MAX": "{{ label }} mag maximaal {{ value }} zijn",
+        "IS_NOT_VALID": "{{ label }} is ongeldig"
+      }
+    }
+  }
+}
