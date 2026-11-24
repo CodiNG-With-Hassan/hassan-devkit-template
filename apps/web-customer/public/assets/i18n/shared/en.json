@@ -1,0 +1,22 @@
+{
+  "SHARED": {
+    "NAV": {
+      "HOME": "Go to the start page"
+    },
+    "COMPONENTS": {
+      "THEME": {
+        "LIGHT": "Light mode",
+        "DARK": "Dark mode"
+      },
+      "FIELD_ERRORS": {
+        "IS_REQUIRED": "{{ label }} is required",
+        "EMAIL": "{{ label }} is not a valid email address",
+        "MIN_LENGTH": "{{ label }} must be at least {{ value }} characters",
+        "MAX_LENGTH": "{{ label }} must be at most {{ value }} characters",
+        "MIN": "{{ label }} must be at least {{ value }}",
+        "MAX": "{{ label }} must be at most {{ value }}",
+        "IS_NOT_VALID": "{{ label }} is not valid"
+      }
+    }
+  }
+}

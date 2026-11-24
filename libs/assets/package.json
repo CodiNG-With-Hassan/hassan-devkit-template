@@ -1,0 +1,6 @@
+{
+  "name": "assets",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Shared static assets for the web apps (images). Consumed as a workspace:* dependency; each app maps src/ into its bundle via the angular.json assets array (input node_modules/assets/src, output assets)."
+}

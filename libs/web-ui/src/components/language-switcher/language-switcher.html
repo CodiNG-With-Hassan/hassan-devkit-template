@@ -1,0 +1,20 @@
+<p-select
+  [options]="options"
+  [formField]="languageField"
+  optionLabel="label"
+  optionValue="code"
+  class="w-40"
+>
+  <ng-template #selectedItem let-selectedOption>
+    <div class="flex items-center gap-2">
+      <span class="text-base">{{ selectedOption.flag }}</span>
+      <span class="language-switcher-name text-sm">{{ selectedOption.label }}</span>
+    </div>
+  </ng-template>
+  <ng-template #item let-option>
+    <div class="flex items-center gap-2">
+      <span class="text-base">{{ option.flag }}</span>
+      <span class="text-sm">{{ option.label }}</span>
+    </div>
+  </ng-template>
+</p-select>

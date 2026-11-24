@@ -1,27 +1,41 @@
 # Dev image for the API (apps/api). Build context: the repo root.
-FROM node:24-alpine
+FROM node:26-alpine
 
 # Match the packageManager pin in the root package.json.
-RUN npm install -g pnpm@10.33.0
-# No git checkout inside the image: the root `prepare` (hassan-devkit hooks:install) skips.
+RUN npm install -g pnpm@11.25.0
 ENV HUSKY=0
 
 WORKDIR /workspace
 
-# Every importer's package.json must be present so --frozen-lockfile can validate the
-# single workspace lockfile, even for a filtered install.
+# Every importer's package.json must be present so --frozen-lockfile can
+# validate the single workspace lockfile, even for a filtered install.
 COPY package.json pnpm-lock.yaml pnpm-workspace.yaml ./
 COPY apps/api/package.json apps/api/
-COPY apps/web/package.json apps/web/
+COPY apps/web-admin/package.json apps/web-admin/
+COPY apps/web-customer/package.json apps/web-customer/
+COPY libs/api-types/package.json libs/api-types/
+COPY libs/api-client/package.json libs/api-client/
+COPY libs/assets/package.json libs/assets/
+COPY libs/i18n/package.json libs/i18n/
+COPY libs/shared-utils/package.json libs/shared-utils/
+COPY libs/theme/package.json libs/theme/
+COPY libs/web-ui/package.json libs/web-ui/
 RUN pnpm install --frozen-lockfile --filter api
 
-# No app source in the image: compose bind-mounts apps/api over /workspace/apps/api and
-# keeps node_modules in a named volume seeded from the install layer above, so every
-# checkout on the same lockfile shares one image.
+# No app source in the image: compose bind-mounts apps/api over /workspace/apps/api
+# and keeps node_modules in a named volume seeded from the install layer above.
+# That is what lets every worktree on the same lockfile share one image
+# (docs/WORKTREES.md).
 
 RUN addgroup -g 1001 -S nodejs && \
     adduser -S nestjs -u 1001 && \
     chown -R nestjs:nodejs /workspace
 USER nestjs
 
+# End in the app dir so `docker compose exec backend pnpm <script>` works
+# unchanged.
+WORKDIR /workspace/apps/api
+
 EXPOSE 3000
+
+CMD ["pnpm", "run", "start:dev"]

@@ -1,4 +1,11 @@
 {
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
-  "extends": ["github>CodiNG-With-Hassan/hassan-devkit//packages/renovate-config"]
+  "extends": ["github>CodiNG-With-Hassan/hassan-devkit//packages/renovate-config/default"],
+  "packageRules": [
+    {
+      "description": "The template follows the devkit unattended: a devkit bump merges itself once CI (format, lint, production builds) is green.",
+      "matchPackageNames": ["/^@coding-with-hassan//"],
+      "automerge": true
+    }
+  ]
 }

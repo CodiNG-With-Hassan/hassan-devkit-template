@@ -1,0 +1,17 @@
+<header class="border-b border-(--p-content-border-color) bg-(--p-content-background)">
+  <div
+    class="mx-auto flex min-h-16 max-w-screen-xl items-center justify-between gap-3 px-4 sm:px-8"
+  >
+    <a
+      routerLink="/"
+      class="text-(--p-text-color) no-underline"
+      [attr.aria-label]="'SHARED.NAV.HOME' | translate"
+    >
+      <app-logo class="h-9" />
+    </a>
+    <div class="flex items-center gap-3">
+      <app-theme-switcher />
+      <app-language-switcher [compact]="true" />
+    </div>
+  </div>
+</header>

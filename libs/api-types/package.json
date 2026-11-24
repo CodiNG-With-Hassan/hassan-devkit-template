@@ -1,0 +1,22 @@
+{
+  "name": "api-types",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Request/response types generated from the API's OpenAPI spec. Types only — no runtime code.",
+  "types": "./src/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts"
+    }
+  },
+  "scripts": {
+    "spec:fetch": "node scripts/fetch-spec.mjs",
+    "generate": "openapi-typescript spec/openapi.json -o src/generated/api.d.ts",
+    "sync": "pnpm spec:fetch && pnpm generate",
+    "check": "pnpm generate && git diff --exit-code -- src/generated"
+  },
+  "devDependencies": {
+    "openapi-typescript": "^7.13.0",
+    "typescript": "^5.9.3"
+  }
+}

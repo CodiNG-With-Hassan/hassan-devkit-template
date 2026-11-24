@@ -1,0 +1,17 @@
+{
+  "name": "theme",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Brand tokens: the PrimeNG preset shared by every web app (consumed as source via the @Theme tsconfig path alias). Never built.",
+  "sideEffects": false,
+  "scripts": {
+    "format": "prettier --write \"src/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.ts\""
+  },
+  "dependencies": {
+    "@primeuix/themes": "^3.0.0"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  }
+}

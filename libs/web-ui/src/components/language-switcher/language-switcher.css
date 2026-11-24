@@ -1,0 +1,18 @@
+/* Plain CSS: these rules reach into PrimeNG's own select markup, which utilities cannot. */
+@media (max-width: 639px) {
+  app-language-switcher.language-switcher-compact .p-select {
+    width: 3rem;
+  }
+
+  app-language-switcher.language-switcher-compact .p-select-label {
+    padding-inline: 0.375rem 0;
+  }
+
+  app-language-switcher.language-switcher-compact .language-switcher-name {
+    display: none;
+  }
+
+  app-language-switcher.language-switcher-compact .p-select-dropdown {
+    width: 1.5rem;
+  }
+}
