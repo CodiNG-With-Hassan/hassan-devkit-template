@@ -1,0 +1,22 @@
+{
+  "name": "api-client",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Angular HTTP services generated from the API's OpenAPI spec (libs/api-types/spec). Consumed as source by current-Angular web apps via the @ApiClient tsconfig path alias.",
+  "sideEffects": false,
+  "scripts": {
+    "generate": "orval --config orval.config.ts && node scripts/rename-to-repositories.mjs",
+    "check": "pnpm generate && git diff --exit-code -- src/generated"
+  },
+  "dependencies": {
+    "@angular/common": "^22.1.3",
+    "@angular/core": "^22.1.3",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.3.0"
+  },
+  "devDependencies": {
+    "orval": "^8.23.0",
+    "prettier": "^3.9.6",
+    "typescript": "^5.9.3"
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "name": "tpl-i18n",
+  "version": "0.0.1",
+  "private": true,
+  "description": "Framework-agnostic language definitions shared across the applications.",
+  "sideEffects": false,
+  "scripts": {
+    "check-translations": "node ../../scripts/check-error-translations.mjs && node ../../scripts/check-shared-translations.mjs",
+    "format": "prettier --write \"src/**/*.{ts,json}\" \"../../scripts/**/*.mjs\" \"../../docs/testing/**/*.ts\"",
+    "format:check": "prettier --check \"src/**/*.{ts,json}\" \"../../scripts/**/*.mjs\" \"../../docs/testing/**/*.ts\""
+  },
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "types": "./src/index.ts",
+      "default": "./src/index.ts"
+    }
+  },
+  "dependencies": {
+    "api-types": "workspace:*"
+  },
+  "devDependencies": {
+    "prettier": "^3.9.6"
+  },
+  "nx": {
+    "targets": {
+      "format:check": {
+        "inputs": [
+          "default",
+          "{workspaceRoot}/.prettierrc",
+          "{workspaceRoot}/scripts/**/*.mjs",
+          "{workspaceRoot}/docs/testing/**/*.ts"
+        ]
+      }
+    }
+  }
+}

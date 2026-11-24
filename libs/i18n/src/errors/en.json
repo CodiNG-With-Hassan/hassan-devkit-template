@@ -1,0 +1,12 @@
+{
+  "ERRORS": {
+    "UNKNOWN": "Something went wrong. Please try again.",
+    "VALIDATION_FAILED": "The submitted data is invalid. Check your input and try again.",
+    "INTERNAL_ERROR": "An unexpected server error occurred. Please try again later.",
+    "AUTH_UNAUTHORIZED": "You are not signed in or your session has expired. Please sign in again.",
+    "AUTH_FORBIDDEN": "You do not have permission to perform this action.",
+    "NOT_FOUND": "The requested page or item could not be found. It may have been moved or removed.",
+    "PAYLOAD_TOO_LARGE": "The upload is too large. Choose a smaller file and try again.",
+    "RATE_LIMITED": "Too many attempts. Please wait a moment and try again."
+  }
+}

@@ -1,12 +1,9 @@
 import { Module } from '@nestjs/common';
+import { APP_FILTER } from '@nestjs/core';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ScheduleModule } from '@nestjs/schedule';
-import { AuthModule } from './auth/auth.module';
-import { UsersModule } from './users/users.module';
-import { MailModule } from './mail/mail.module';
-import { StorageModule } from './storage/storage.module';
 import { HealthModule } from './health/health.module';
+import { AllExceptionsFilter } from './common/filters/all-exceptions.filter';
 
 @Module({
   imports: [
@@ -21,16 +18,18 @@ import { HealthModule } from './health/health.module';
         password: configService.get<string>('DB_PASSWORD'),
         database: configService.get<string>('DB_NAME'),
         autoLoadEntities: true,
+        // Schema follows the entities on every boot, production included
+        // (ADR 0001). Anything synchronize cannot do safely runs first via
+        // runSqlBeforeSynchronize (src/migrations/).
         synchronize: true,
       }),
       inject: [ConfigService],
     }),
-    ScheduleModule.forRoot(),
-    AuthModule,
-    UsersModule,
-    MailModule,
-    StorageModule,
     HealthModule,
+  ],
+  providers: [
+    // Shapes every error body into the ErrorResponse contract (ADR 0002).
+    { provide: APP_FILTER, useClass: AllExceptionsFilter },
   ],
 })
 export class AppModule {}

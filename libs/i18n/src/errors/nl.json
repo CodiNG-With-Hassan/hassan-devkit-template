@@ -1,0 +1,12 @@
+{
+  "ERRORS": {
+    "UNKNOWN": "Er is iets misgegaan. Probeer het opnieuw.",
+    "VALIDATION_FAILED": "De ingevulde gegevens zijn ongeldig. Controleer je invoer en probeer het opnieuw.",
+    "INTERNAL_ERROR": "Er is een onverwachte serverfout opgetreden. Probeer het later opnieuw.",
+    "AUTH_UNAUTHORIZED": "Je bent niet ingelogd of je sessie is verlopen. Log opnieuw in.",
+    "AUTH_FORBIDDEN": "Je hebt geen toestemming om deze actie uit te voeren.",
+    "NOT_FOUND": "De opgevraagde pagina of het item is niet gevonden. Mogelijk is het verplaatst of verwijderd.",
+    "PAYLOAD_TOO_LARGE": "De upload is te groot. Kies een kleiner bestand en probeer het opnieuw.",
+    "RATE_LIMITED": "Te veel pogingen. Wacht even en probeer het opnieuw."
+  }
+}
