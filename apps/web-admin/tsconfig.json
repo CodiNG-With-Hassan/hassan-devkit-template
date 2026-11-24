@@ -1,0 +1,45 @@
+/* To learn more about Typescript configuration file: https://www.typescriptlang.org/docs/handbook/tsconfig-json.html. */
+/* To learn more about Angular compiler options: https://angular.dev/reference/configs/angular-compiler-options. */
+{
+  "compileOnSave": false,
+  "compilerOptions": {
+    "strict": true,
+    "noImplicitOverride": true,
+    "noPropertyAccessFromIndexSignature": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    "skipLibCheck": true,
+    "isolatedModules": true,
+    "experimentalDecorators": true,
+    "importHelpers": true,
+    "target": "ES2022",
+    "module": "preserve",
+    "rootDir": "../..",
+    "paths": {
+      "@ApiClient": ["../../libs/api-client/src/index.ts"],
+      "@Theme": ["../../libs/theme/src/primeng.preset.ts"],
+      "@WebUi": ["../../libs/web-ui/src/index.ts"],
+      "@Environment": ["./src/environments/environment"],
+      "@Core/*": ["./src/app/core/*"],
+      "@Shared/*": ["./src/app/shared/*"],
+      "@Features/*": ["./src/app/features/*"],
+      "@Models/*": ["./src/app/core/models/*"],
+      "@Enums/*": ["./src/app/core/enums/*"],
+      "@Guards/*": ["./src/app/core/guards/*"],
+      "@Services/*": ["./src/app/core/services/*"],
+      "@Store/*": ["./src/app/core/store/*"]
+    }
+  },
+  "angularCompilerOptions": {
+    "enableI18nLegacyMessageIdFormat": false,
+    "strictInjectionParameters": true,
+    "strictInputAccessModifiers": true,
+    "strictTemplates": true
+  },
+  "files": [],
+  "references": [
+    {
+      "path": "./tsconfig.app.json"
+    }
+  ]
+}
